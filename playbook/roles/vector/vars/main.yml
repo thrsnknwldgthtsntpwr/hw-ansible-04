@@ -1,0 +1,4 @@
+---
+# vars file for vector-role
+vector_url: "https://yum.vector.dev/stable/vector-0/x86_64/vector-{{ vector_rpm_version }}.x86_64.rpm"
+vector_config_dir: "/etc/vector"

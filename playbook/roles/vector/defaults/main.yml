@@ -1,0 +1,24 @@
+---
+# defaults file for vector-role
+vector_version: "0.42.0"
+vector_rpm_version: "0.42.0-1"
+vector_clickhouse_ip: #locate your clickhouse instance here
+clickhouse_db_name: "logs"
+clickhouse_table_name: "data_logs"
+#vector_config may be replaced by your own one
+vector_config:
+  sources:
+    demo_logs:
+      type: demo_logs
+      format: syslog
+  sinks:
+    to_clickhouse:
+      type: clickhouse
+      inputs:
+        - demo_logs
+      database: "{{ clickhouse_db_name }}"
+      endpoint: "http://{{ vector_clickhouse_ip }}:8123"
+      table: "{{ clickhouse_table_name }}"
+      compression: gzip
+      healthcheck: true
+      skip_unknown_fields: true

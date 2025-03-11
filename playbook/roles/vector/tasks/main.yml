@@ -1,0 +1,21 @@
+---
+- name: Download Vector distro
+  ansible.builtin.get_url:
+    url: https://packages.timber.io/vector/{{vector_version}}/vector_{{vector_version}}-1_amd64.deb
+    dest: /tmp/vector_{{vector_version}}.deb
+    mode: '0777'
+
+- name: Install Vector
+  become: true
+  ansible.builtin.apt:
+    deb: "/tmp/vector_{{vector_version}}.deb"
+
+- name: Apply vector template
+  become: true
+  ansible.builtin.template:
+    src: ./template/vector.yml.j2
+    dest: "{{ vector_config_dir }}/vector.yml"
+    mode: "0644"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    validate: vector validate --no-environment --config-yaml %s

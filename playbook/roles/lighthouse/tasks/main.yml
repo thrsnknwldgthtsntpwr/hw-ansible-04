@@ -1,0 +1,21 @@
+---
+- name: Install nginx
+  become: true
+  become_user: root
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+- name: Create lighthouse config file
+  become: true
+  become_user: root
+  template:
+    src: templates/lighthouse.conf.j2
+    dest: /etc/nginx/conf.d/default.conf
+    mode: "0644"
+  notify: Restart nginx service
+
+- name: Get lighthouse from a git repo
+  ansible.builtin.git:
+    repo: "{{ lighthouse_url }}"
+    dest: "{{ lighthouse_dir }}"
+    version: master
